@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Chessground Demo</title>
+
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="assets/chessground.base.css"
+        />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="assets/chessground.brown.css"
+        />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="assets/chessground.cburnett.css"
+        />
+        <style>
+            #chessground {
+                width: 500px;
+                height: 500px;
+            }
+
+            cg-board {
+                background-color: #bfcfdd;
+            }
+        </style>
+
+        <script type="module">
+            import { Chessground } from "./chessground.js";
+
+            const config = {
+                orientation: "white", // board orientation (or view angle) "white" | "black"
+                turnColor: "white", // turn to play. "white" | "black"
+                check: null, // square currently in check "a2" | null
+                lastMove: null, // squares part of the last move ["c3", "c4"] | null
+                selected: null, // square currently selected "a1" | null
+                coordinates: true, // display board coordinates as square ::after elements
+                viewOnly: false, // don't bind events: the user will never be able to move pieces around
+                minimalDom: false, // don't use square elements. Optimization to use only with viewOnly
+                disableContextMenu: false,
+                highlight: {
+                    lastMove: true, // add last-move class to squares
+                    check: true, // add check class to squares
+                    dragOver: true, // add drag-over class to square when dragging over it
+                },
+                animation: {
+                    enabled: true, // enable piece animations, moving and fading
+                    duration: 200, // animation duration in milliseconds
+                },
+                movable: {
+                    free: true, // all moves are valid - board editor
+                    color: "both", // color that can move. "white" | "black" | "both" | null
+                    dests: {}, // valid moves. {a2: ["a3", "a4"], b1: ["a3", "c3"]} | null
+                    dropOff: "revert", // when a piece is dropped outside the board. "revert" | "trash"
+                    showDests: true, // add the move-dest class to squares
+                    events: {
+                        // called after the move has been played
+                        after: function (orig, dest, metadata) {},
+                    },
+                },
+                premovable: {
+                    enabled: true, // allow premoves for color that can not move
+                    showDests: true, // add the premove-dest class to squares
+                    current: null, // keys of the current saved premove ["e2", "e4"] | null
+                    events: {
+                        // called after the premove has been set
+                        set: function (orig, dest) {},
+                        // called after the premove has been unset
+                        unset: function () {},
+                    },
+                },
+                draggable: {
+                    enabled: true, // allow moves & premoves to use drag'n drop
+                    distance: 3, // minimum distance to initiate a drag, in pixels
+                    squareTarget: false, // display big square target; intended for mobile
+                    centerPiece: true, // center the piece on cursor at drag start
+                    showGhost: true, // show ghost of piece being dragged
+                },
+                drawable: {
+                    enabled: true, // enable SVG circle and arrow drawing on the board
+                },
+                events: {
+                    change: function () {}, // called after the situation changes on the board
+                    // called after a piece has been moved.
+                    // capturedPiece is null or like {color: 'white', 'role': 'queen'}
+                    move: function (orig, dest, capturedPiece) {},
+                    select: function (key) {}, // called when a square is selected
+                },
+            };
+            const ground = Chessground(
+                document.getElementById("chessground"),
+                config
+            );
+
+            ground.setPieces({
+                a1: null,
+                c5: { color: "black", role: "queen" },
+            });
+        </script>
+    </head>
+
+    <body>
+        <div id="chessground"></div>
+    </body>
+</html>
