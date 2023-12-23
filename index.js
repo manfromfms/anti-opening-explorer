@@ -13,5 +13,5 @@ app.get('/', (req, res) => {
 app.use((req, res, next) => {
     console.log('Full Path:', req.originalUrl)
 
-    res.sendFile(__dirname + '/node_modules/chessgroundx' + req.originalUrl)
+    res.sendFile(__dirname + '/cm-chessboard/' + req.originalUrl)
 });
